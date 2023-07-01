@@ -31,3 +31,9 @@ osr2mp4/config6.json
 osr2mp4/config7.json
 osr2mp4/config8.json
 osr2mp4/config9.json
+error.txt
+*.whl
+*.pyd
+replay.json
+sample.txt
+settings.json

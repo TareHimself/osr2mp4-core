@@ -36,11 +36,10 @@ def get_offset(beatmap, start_index, end_index, replay_info, endtime, fps=60):
 
 
 def find_time(starttime, endtime, replay, settings):
-
 	starttime *= settings.timeframe
-	starttime += replay[0][Replays.TIMES]
+	# starttime += replay[0][Replays.TIMES]
 	starttime = min(starttime, replay[-15][Replays.TIMES])
-
+	
 	if endtime != -1:
 		endtime *= settings.timeframe
 		# endtime += replay_start
@@ -50,8 +49,8 @@ def find_time(starttime, endtime, replay, settings):
 
 	startindex = None
 
-	if starttime == 0:
-		startindex = 0
+	# if starttime == 0:
+	# 	startindex = 0
 
 	endindex = len(replay) - 3
 	if endtime == -1:
@@ -63,4 +62,5 @@ def find_time(starttime, endtime, replay, settings):
 		if x[3] >= endtime + 1000 and endtime != -1:
 			endindex = index
 			break
+
 	return startindex, endindex

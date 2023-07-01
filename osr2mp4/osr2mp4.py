@@ -1,6 +1,7 @@
 import atexit
 import inspect
 import os
+import shutil
 import sys
 import time
 import traceback
@@ -162,9 +163,24 @@ class Osr2mp4:
 			add_useless_shits(self.replay_info.play_data, self.beatmap)
 			self.cur_time = self.replay_info.play_data[0][Replays.TIMES]
 			self.replay_event = self.replay_info.play_data
-
+		
 		self.start_index, self.end_index = find_time(starttime, endtime, self.replay_event, self.settings)
 		self.starttime, self.endtime = starttime, endtime
+
+		with open(os.path.join(os.path.dirname(self.settings.output),'replay.json') ,'w') as f:
+			to_save = {}
+			to_save['events'] = []
+			for event in self.replay_event:
+				to_save['events'].append({
+					'time': event[Replays.TIMES],
+					'x': event[Replays.CURSOR_X],
+					'y': event[Replays.CURSOR_Y],
+					'keys': event[Replays.KEYS_PRESSED]
+				})
+
+			to_save['breaks'] = self.beatmap.breakperiods
+
+			json.dump(to_save,f,indent=4)
 
 		self.resultinfo = None
 
@@ -247,7 +263,8 @@ class Osr2mp4:
 			concat_videos(self.settings)
 		elif self.data["Process"] == 1:
 			rename_video(self.settings)
-		mix_video_audio(self.settings)
+		# mix_video_audio(self.settings)
+		shutil.copyfile(os.path.join(self.settings.temp,'outputf.mkv'),self.settings.output)
 
 	def cleanup(self):
 		try:
